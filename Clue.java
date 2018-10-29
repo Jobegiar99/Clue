@@ -66,7 +66,7 @@ public class Clue
         {
             System.out.println("Al llegar al mercado observas un monton de locales. Es el lugar ideal para buscar pistas! Si el asesino"+
             " estuvo por aca definitivamente tuvo que haber dejado algo. Que te gustaria hacer?"+
-            "\n");
+            "\nExplorar el lugar (1)\nInvestigar un local (2)\nEsperar a ver si aparece alguien(3)");
         }
     }
 
