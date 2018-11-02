@@ -9,14 +9,23 @@ public class Assassin
     private String assassinClue2;
     private String assassinClue3;
     private String weaponClue1;
-    private String weaponClue2;
+    private String weaponClue2;  
     private String weaponClue3;
     private String roomClue1;
     private String roomClue2;
     private String roomClue3;
+    private String assassinQuestion1;
+    private String assassinAnswer1;
+    private String assassinWrong1;
+    private String assassinQuestion2;
+    private String assassinAnswer2;
+    private String assassinWrong2;
+    private String assassinQuestion3;
+    private String assassinAnswer3;
+    private String assassinWrong3;
+    
 
-    public  Assassin ()
-    {
+    public  Assassin (){
         String[] names=new String[]{"Plague Doctor", "Der Krampus", "Jack the Ripper", "Madame de Brinvilliers", "Anne Boleyn", "Manuel Blanco Romasanta"};
         String[] weapons=new String[] {"Pistola", "Cuchillo","Veneno","Magia","Tortura","Fuego"};
         String[] rooms=new String[]{"plaza del mercado","monasterio", "bosque", "cementerio","plaza central","lago del bosque","catacumbas"};
@@ -34,23 +43,36 @@ public class Assassin
 
     }
 
-    public String getName()
-    {
+    /**
+     * This method returns the name of the assassin.
+     * @return name the name of the assassin
+     */
+    public String getName(){ //Da como String el nombre del asesino
         return this.name;
     }
 
-    public String getWeapon()
-    {
+    /**
+     * This method returns the name of the weapon used to kill the victim.
+     * @return
+     */
+    public String getWeapon(){ //Da como String el arma homicida
         return this.weapon;
     }
 
-    public String getRoom()
-    {
+    /**
+     * This method returns the name of the place where the victim was murdered.
+     * @return
+     */
+    public String getRoom(){ 
         return this.room;
     }
 
-    public String getAssassinClue()
-    {
+    /**
+     * This method gives a random clue related to 
+     * @return
+     */
+    public String getAssassinClue(){ 
+    
         Random rand=new Random();
         int giveAssassinClue=rand.nextInt(3);
         switch(giveAssassinClue)
@@ -65,8 +87,51 @@ public class Assassin
         return "polvo";
     }
 
-    private void setAssassinClues (int number)
-    {
+    /**
+     * This method returns a random clue about what weapon was used to kill the victim.
+     * @return
+     */
+    public String getWeaponClue(){  
+    
+        Random rand=new Random();
+        int giveWeaponClue=rand.nextInt(3);
+        switch(giveWeaponClue){
+                case 0:
+                        return this.weaponClue1;
+                case 1:
+                        return this.weaponClue2;
+                case 2: 
+                        return this.weaponClue3;
+            }
+            return "polvo";
+    }
+
+    /**
+     * This method returns a random clue about where was the victim murdered.
+     * @return
+     */
+    public String getRoomClue(){
+        Random rand=new Random();
+        int giveRoomClue=rand.nextInt(3);
+                switch (giveRoomClue){
+                        case 0: 
+                                return this.roomClue1;
+                        case 1:
+                                return this.roomClue2;
+                        case 2:
+                                return this.roomClue3;
+                                
+                }
+                return "tu hermana dice hola";
+        
+    }
+    
+
+    /**
+     * This method sets assassin clues.
+     * @param number gets the number of the assassin.
+     */
+    private void setAssassinClues (int number) {
         switch(number)
         {
             case 0: //Plague Doctor
@@ -102,8 +167,12 @@ public class Assassin
         }
     }
 
-    private void setWeaponClues(int number)
-    {
+
+    /**
+     * This method defines the clues for the weapon used to kill player's sister.
+     * @param number gets the number of the weapon used to kill the victim.
+     */
+    private void setWeaponClues(int number) {
         switch(number)
         {
             case 0: //Pistola
@@ -141,8 +210,12 @@ public class Assassin
 
     }
 
-    private void setRoomClues(int number)
-    {
+
+    /**
+     * This method defines the clues for the room where player's sister was murdered.
+     * @param number gets the number of the room.
+     */
+    private void setRoomClues(int number) {
         switch(number)
         {
             case 0://plaza del mercado
@@ -182,5 +255,17 @@ public class Assassin
                     break;
         }
     }
-     
+
+    private void setAssassinQuestionsandAnswers(){
+        String [] questions=new String[]{
+                "\nDe que fue la epidemia que sufrio Estrasburgo en 1518?",
+                "\nCual de las siguientes personas tuvo mucha influecia en la segunda guerra mundial?",
+                "\nCual de las siguientes ciudades fue destruida por una bomba nuclear en Japon?"
+         };
+        String [] answers=new String[]{
+                "\nDe monos  voladores (1)\nDe diarrea y gripe (2)\nDe baile (3)\nLluvia de insectos que destruian las cosechas (4)\nAlienigenas y reptilianos (5)",
+                 "\nAdolf Hitler (1)\nOsama Bin Laden (2)\nDonald Trump (3)\n Kim Jong Un (4)\nEllen Degeneres (5)",
+                 "\nNiko ni Noko (1)\nFukushima (2)\nAkai Tako (3)\nKawaii Desu (4)\nShingeki no Kyojin (5)"
+        };
+    }
 }
