@@ -1,8 +1,10 @@
-import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Clue
 {
+    static byte[] askedQuestions=new byte[]{-1,-1,-1,-1,-1,-1,-1};
+    static byte askedQuestionsArrayControl=0;
 
     /**
      * This method controls how the game story evolves.
@@ -82,9 +84,9 @@ public class Clue
         isValidInput=false;
         if (marketClue){
             if (marketAssassinClue==false){
-            System.out.println("Decidiste volver al mercado para seguir investigando ya que te parecio sospechoso un local. Cuando estas a punto "+
+            System.out.println("Decidiste volver al mercado para seguir investigando ya que te parecio sospechoso un local.\nCuando estas a punto "+
                                "de llegar, escuchas pasos, por lo que te escondes.\n Una voz te advierte que ya sabe que estas ahi, por lo que "+
-                               "te recomienda salir antes de que el vaya por vos.\nAl salir te das cuenta de que es un viejo amigo, lo cual te alegra." +
+                               "te recomienda salir antes de que vaya por vos.\nAl salir te das cuenta de que es un viejo amigo, lo cual te alegra." +
                                "\nCuando estas a punto de saludarlo, te dice que sabe que estas buscando pistas sobre el asesino de tu hermana,"+
                                " y que, debido a que la seguridad de su hermano esta en riesgo, debera detenerte a toda costa." +
                                "\n\"Mi hermano fue secuestrada por el asesino, si no quiero que lo mate tendras que enfrentarte a mi\"" +
@@ -92,6 +94,7 @@ public class Clue
                                "\n\"Jugaremos ruleta rusa. Cuando contestes una pregunta, te apuntare y apretare el gatillo si es incorrecta la respuesta."+
                                "Si la respuesta es correcta, me apuntare a mi. La pregunta sera la misma hasta que te mate por intentos fallidos o cambiara si"+
                                " la respuesta es correcta y no muero.\"" );
+            assassinQuestions(input, isValidInput,decision, gameAssassin);
             }else if (marketAssassinClue){
                 System.out.println("Consideras ir al mercado, pero como ya has ido dos veces preferis ir a otro lado");
                 return true;
@@ -146,7 +149,9 @@ public class Clue
 
 
 
-    public static boolean assassinChallenge(Scanner input, boolean isValidInput){
+    public static boolean assassinQuestions(Scanner input, boolean isValidInput,byte decision,Assassin gameAssassin){
+        boolean isSameNumber=true;
+        boolean isDone=false;
         String [] questions=new String[]{
             "\nDe que fue la epidemia que sufrio Estrasburgo en 1518?", //1
             "\nCual de las siguientes personas tuvo mucha influecia en la segunda guerra mundial?", //2
@@ -160,7 +165,7 @@ public class Clue
       /*  1*/"\nDe monos  voladores (1)\nDe diarrea y gripe (2)\nDe baile (3)\nDe lluvias de insectos que destruian las cosechas (4)\nDe alienigenas ancentrales (5)",
       /*  2*/"\nAdolf Hitler (1)\nOsama Bin Laden (2)\nDonald Trump (3)\nKim Jong Un (4)\nEllen Degeneres (5)",
       /*  3*/"\nNiko ni Noko (1)\nFukushima (2)\nAkai Tako (3)\nKawaii Desu (4)\nShingeki no Kyojin (5)",
-      /*  4*/"\nLe gustaba practicar brujeria en la edad media (1)\nLe gustaba preparar pie de queso(2)\nPonia harina en sus pelucas(3)"+
+      /*  4*/"\nLe gustaba practicar brujeria en la edad media T(1)\nLe gustaba preparar pie de queso(2)\nPonia harina en sus pelucas(3)"+
              "\nCreia que comer rocas era saludable (4)\nLe gustaba bailar desnuda a mitad de la calle todos los martes a las tres de la tarde (5)",
       /*  5*/"\nPara crear pociones (1)\nPara decorar la vestimenta (2)\nPara reducir el mal olor (3)\nPara darle una a los caballeros cuando estos pasaran al lado (4)"+
              "\nPara llevar como muestra de buenas intenciones al visitar a alguien por primera vez (5)",
@@ -170,13 +175,25 @@ public class Clue
              "\nAtaban sus pies y la lanzaban a un rio, si flotaba era bruja y la quemaban, si no , moria y por lo tanto no era bruja (3)"+
              "\nLe tiraban sal a los ojos, si de estos salian lagrimas, era una bruja (4)"+
              "\nLa tiraban de un acantilado, si sobrevivia era bruja y la quemaban, si moria, no era bruja y por lo tanto era perdonada. (5)"
-
         };
+        Random rand=new Random();
 
-        System.out.println(questions[3]);
-        System.out.println(answers[3]);
+            do{ 
+                int arrayControl=rand.nextInt(7);
+                assassinChallenge(questions[arrayControl], answers[arrayControl], input,isValidInput, decision,gameAssassin);
+                
+
+            }while (isDone==false);
+
+            
+            return true;
+
+    }
+
+    public static boolean assassinChallenge(String question,String answer,Scanner input,boolean isValidInput,byte decision,Assassin gameAssassin){
+        System.out.println(question + answer);
+        decision=input.nextByte();
         return true;
-
     }
 
 
@@ -215,6 +232,7 @@ public class Clue
   
 
     public static void main (String[] args){
+      
         Scanner input=new Scanner(System.in);
         byte decision;
         boolean isValidInput=false, marketClue=false, conventClue=false, forestClue=false,validInput=false,fromDeerToWait=false,fromMarketExploretoForest=false,
@@ -226,12 +244,11 @@ public class Clue
                                "\nPara salir del juego ingrese el numero 4");
             while (true){
                 isValidInput=input.hasNextByte(); //Es para evitar que se ingrese un dato erroneo por accidente(por ejemplo una K) y crashee el programa.
-                if(isValidInput)
-                {   
+                if(isValidInput){
+
                     decision=input.nextByte();
 
-                    switch (decision)
-                    {
+                    switch (decision){
                         case 1: //El jugador comenzara el juego.
                                 mainGame(marketClue, conventClue, forestClue, fromDeerToWait, fromMarketExploretoForest, fromConventToLake,marketAssassinClue,isHard);
                                 System.out.println( "\nPara empezar una nueva partida ingrese el numero 1." +
@@ -247,7 +264,7 @@ public class Clue
                                                    "\nPara salir del juego ingrese el numero 4");
                                 break;
                         case 3: //El jugador podra leer las instrucciones.
-                                assassinChallenge(input, isValidInput);
+
                                 break;
                         case 4:
                                 System.exit(0);
@@ -256,14 +273,12 @@ public class Clue
 
                     }
 
-                } else
-                {
+                } else{
                     System.out.println("El dato ingresado no es correcto. Por favor vuelva a intentarlo");
                     input.next();
                 }
-            }
-            
-          
+           }  
+         
     }
 
 }
