@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Clue{
 
     public static String[] givenClues=new String[6];
-    public static byte givenCluesControl=0;
+    public static  byte givenCluesControl=0;
 
     public static void mapCentral(){
         System.out.println("\n"+//MAPA GENERAL
@@ -816,7 +816,7 @@ public class Clue{
         boolean someoneHasDied=false;
         do{     
 
-                decision=isValidInputAssassinChallenge(input, isValidInput);
+            decision=isValidInputAssassinChallenge(input, isValidInput);
                 
     
                 switch (arrayControl){
@@ -1142,27 +1142,25 @@ public class Clue{
 
     public static byte isValidInputAssassinChallenge(Scanner input,boolean isValidInput){
         String valor;
+        isValidInput=false;
         do{ 
-            isValidInput=input.hasNextByte(); //Es para evitar que se ingrese un dato erroneo por accidente(por ejemplo una K) y crashee el programa.
-            if(isValidInput){
-                valor=input.nextByte();
+            
+            valor=input.nextLine();
                 switch(valor){
-                    case 1:
+                    case "1":
                             return 1;
-                    case 2:
+                    case "2":
                             return 2;
-                    case 3:
+                    case "3":
                             return 3;
-                    case 4:
+                    case "4":
                             return 4;
-                    case 5:
+                    case "5":
                             return 5;
                     default:
                             System.out.println("Ingrese un dato valido");
                 }
-            }else{
-                input.next();
-            }
+          
         }while (isValidInput=false);
             return -1;
     }

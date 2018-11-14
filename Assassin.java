@@ -1,7 +1,7 @@
 import java.util.Random;
 
-public class Assassin
-{
+public class Assassin{
+
     private String name;
     private String weapon;
     private String room;
@@ -14,18 +14,15 @@ public class Assassin
     private String roomClue1;
     private String roomClue2;
     private String roomClue3;
-    private String assassinQuestion1;
-    private String assassinAnswer1;
-    private String assassinWrong1;
-    private String assassinQuestion2;
-    private String assassinAnswer2;
-    private String assassinWrong2;
-    private String assassinQuestion3;
-    private String assassinAnswer3;
-    private String assassinWrong3;
+    private String clue1;
+    private String clue2;
+    private String clue3;
+    private String clue4;
+    private String clue5;
+    private String clue6;
     
-
     public  Assassin (){
+
         String[] names=new String[]{"Plague Doctor", "Der Krampus", "Jack the Ripper", "Madame de Brinvilliers", "Anne Boleyn", "Manuel Blanco Romasanta"};
         String[] weapons=new String[] {"Pistola", "Cuchillo","Veneno","Magia","Tortura","Fuego"};
         String[] rooms=new String[]{"plaza del mercado","monasterio", "bosque", "cementerio","plaza central","lago del bosque","catacumbas"};
@@ -45,7 +42,7 @@ public class Assassin
 
     /**
      * This method returns the name of the assassin.
-     * @return name the name of the assassin
+     * @return the name of the assassin
      */
     public String getName(){ //Da como String el nombre del asesino
         return this.name;
@@ -78,6 +75,7 @@ public class Assassin
         switch(giveAssassinClue)
         {
             case 0:
+                    setGivenClues();
                     return this.assassinClue1;
             case 1:
                     return this.assassinClue2;
@@ -114,9 +112,10 @@ public class Assassin
         Random rand=new Random();
         int giveRoomClue=rand.nextInt(3);
                 switch (giveRoomClue){
-                        case 0: 
+                        case 0:
                                 return this.roomClue1;
                         case 1:
+ 
                                 return this.roomClue2;
                         case 2:
                                 return this.roomClue3;
@@ -132,8 +131,7 @@ public class Assassin
      * @param number gets the number of the assassin.
      */
     private void setAssassinClues (int number) {
-        switch(number)
-        {
+        switch(number){
             case 0: //Plague Doctor
                     this.assassinClue1=("sanguijuelas");
                     this.assassinClue2=("monedas");
@@ -173,8 +171,7 @@ public class Assassin
      * @param number gets the number of the weapon used to kill the victim.
      */
     private void setWeaponClues(int number) {
-        switch(number)
-        {
+        switch(number){
             case 0: //Pistola
                     this.weaponClue1="polvora";
                     this.weaponClue2="cartuchos";
@@ -216,8 +213,8 @@ public class Assassin
      * @param number gets the number of the room.
      */
     private void setRoomClues(int number) {
-        switch(number)
-        {
+        switch(number){
+
             case 0://plaza del mercado
                     this.roomClue1="peniques";
                     this.roomClue2="frescas";
@@ -245,7 +242,7 @@ public class Assassin
                     break;
             case 5://lago del bosque
                     this.roomClue1="luna";
-                    this.roomClue2="sobre";
+                    this.roomClue2="solo";
                     this.roomClue3="brisa";
                     break;
             case 6://catacumbas
@@ -256,16 +253,28 @@ public class Assassin
         }
     }
 
-    private void setAssassinQuestionsandAnswers(){
-        String [] questions=new String[]{
-                "\nDe que fue la epidemia que sufrio Estrasburgo en 1518?",
-                "\nCual de las siguientes personas tuvo mucha influecia en la segunda guerra mundial?",
-                "\nCual de las siguientes ciudades fue destruida por una bomba nuclear en Japon?"
-         };
-        String [] answers=new String[]{
-                "\nDe monos  voladores (1)\nDe diarrea y gripe (2)\nDe baile (3)\nLluvia de insectos que destruian las cosechas (4)\nAlienigenas y reptilianos (5)",
-                 "\nAdolf Hitler (1)\nOsama Bin Laden (2)\nDonald Trump (3)\n Kim Jong Un (4)\nEllen Degeneres (5)",
-                 "\nNiko ni Noko (1)\nFukushima (2)\nAkai Tako (3)\nKawaii Desu (4)\nShingeki no Kyojin (5)"
-        };
+    public  void setGivenClues(){
+            switch(Clue.givenCluesControl){
+                    case 0:
+                                Clue.givenClues[Clue.givenCluesControl]=getAssassinClue();
+                                break;
+                    case 1:
+                                Clue.givenClues[Clue.givenCluesControl]=getWeaponClue();
+                                break;
+                    case 2:
+                                Clue.givenClues[Clue.givenCluesControl]=getRoomClue();
+                                break;
+                    case 3:
+                                Clue.givenClues[Clue.givenCluesControl]=getAssassinClue();
+                                break;
+                    case 4:
+                                Clue.givenClues[Clue.givenCluesControl]=getWeaponClue();
+                                break;
+                    case 5:
+                                Clue.givenClues[Clue.givenCluesControl]=getRoomClue();
+                                break;
+            }
     }
+
+
 }
