@@ -1,0 +1,12 @@
+El juego consiste en buscar pistas por la aldea.																									 
+Se puede ir a tres lugares:																												 
+-El mercado																														 
+-El bosque																														 
+-El Convento																														 																												 |
+Al llegar a cada uno de esos lugares se da la opcion de realizar una de tres acciones que le daran al usuario una pista.																 															
+La pista puede ser del nombre del asesino, del arma homicida o del lugar donde fue cometido el asesinato.																		 
+El usuario puede ir a cada lugar dos veces, la segunda vez le da otra pista, la unica condicion es que supere el reto del asesino, el cual puede acabar con la vida del jugador.									 
+Despues de recolectar 6 pistas o ingresar el numero 4, el usuario se dirijira a la estacion de policia, en la cual tendra una oportunidad de decir quien es el asesino en caso de estar en modalidad dificil el juego, si la dificultad esta en facil	 
+el jugador tedra tres intento y se le dara una pista cada vez que se equivoque.	
+
+Ingrese otra opcion del menu para continuar.																					 
