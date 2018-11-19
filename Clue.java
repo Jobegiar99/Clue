@@ -1,12 +1,18 @@
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Clue{
+    private static String instruccionesTxt = "instrucciones.txt";
+    private static String asesinosTxt="asesinos.txt";
+    private static StringBuffer str=new StringBuffer();
 
     public static String[] givenClues=new String[6];
     public static  byte givenCluesControl=0;
 
+    
     public static void mapCentral(){
         System.out.println("\n"+//MAPA GENERAL
         "-------------------------------------------------------------------------------\n"+
@@ -69,22 +75,39 @@ public class Clue{
 
     public static void mapConvent(){
         System.out.println("MAPA\n"+ //MAPA UBICADO EN CONVENTO
-            "-------------------------------------------------------------------------------\n"+
-            "|________________                                            __________________|\n"+
-            "|                |                                          |                  |\n"+
-            "|                |      _______________________________     |                  |\n"+
-            "|                |     |                               |    |                  |\n"+
-            "|                |     |                               |    |    ESTAS AQUI    |\n"+
-            "|    MERCADO     |     |         PLAZA CENTRAL         |    |     CONVENTO     |\n"+
-            "|                |     |                               |    |                  |\n"+
-            "|                |     |_______________________________|    |                  |\n"+
-            "|                |      _______________________________     |                  |\n"+
-            "|                |     |                               |    |                  |\n"+
-            "|________________|     |                               |    |                  |\n"+
-            "|                      |             BOSQUE            |    |__________________|\n"+
-            "|                      |                               |                       |\n"+
-            "|                      |_______________________________|                       |\n"+
-            "-------------------------------------------------------------------------------");
+        "-------------------------------------------------------------------------------\n"+
+        "|________________                                            __________________|\n"+
+        "|                |                                          |                  |\n"+
+        "|                |      _______________________________     |                  |\n"+
+        "|                |     |                               |    |                  |\n"+
+        "|                |     |                               |    |    ESTAS AQUI    |\n"+
+        "|    MERCADO     |     |         PLAZA CENTRAL         |    |     CONVENTO     |\n"+
+        "|                |     |                               |    |                  |\n"+
+        "|                |     |_______________________________|    |                  |\n"+
+        "|                |      _______________________________     |                  |\n"+
+        "|                |     |                               |    |                  |\n"+
+        "|________________|     |                               |    |                  |\n"+
+        "|                      |             BOSQUE            |    |__________________|\n"+
+        "|                      |                               |                       |\n"+
+        "|                      |_______________________________|                       |\n"+
+        "-------------------------------------------------------------------------------");
+    }
+    public static void welcomeToClue(){ 
+        System.out.println(
+        "------------------------------------------------------------------------------\n"+
+        "|                                                                              |\n"+
+        "|                                                                              |\n"+
+        "|                            BIENVENIDO A:                                     |\n"+
+        "|                                                                              |\n"+
+        "|                           CCCC  L    UU UU  EEEE                             |\n"+
+        "|                           C     L    UU UU  E                                |\n"+
+        "|                           C     L    UU UU  EE                               |\n"+
+        "|                           C     L    UU UU  E                                |\n"+
+        "|                           CCCC  LLLL UUUUU  EEEE                             |\n"+
+        "|                                                                              |\n"+
+        "|                                                                              |\n"+
+        "------------------------------------------------------------------------------");
+
     }
 
     public static void playerLost(){
@@ -150,6 +173,20 @@ public class Clue{
         "RETO\n"+
         "RETO\n"+
         "RETO\n");
+    }
+
+    public static void drawFinalGameStage(){
+        System.out.println(
+            "------------------------------------------------------------------------------\n"+
+            "|                                                                              |\n"+
+            "|               PPPPPP OOOOOO L      IITTIII  CCCCCC   IIIIII  AAAAAA          |\n"+
+            "|               P    P O    O L         II    CC         II    A    A          |\n"+
+            "|               P    P O    O L         II    CC         II    A    A          |\n"+
+            "|               PPPPP  O    O L         II    CC         II    AAAAAA          |\n"+
+            "|               P      O    O L         II    CC         II    A    A          |\n"+
+            "|               P      O    O L         II    CC         II    A    A          |\n"+
+            "|               P      OOOOOO LLLLLL IIIIIII  CCCCCC   IIIIII  A    A          |\n"+
+            "|------------------------------------------------------------------------------|" );
     }
 
     public static void pressAKeyToContinue(Scanner input){
@@ -257,7 +294,7 @@ public class Clue{
                                 }else if (conventClue){
                                         someoneHasDied=playConvent(conventClue, isValidInput, decision, gameAssassin,conventAssassinClue,someoneHasDied);
                                         if (someoneHasDied==false){
-                                            forestAssassinClue=true;
+                                            conventAssassinClue=true;
                                             isValidInput=false;
                                             mapCentral();
                                             System.out.println("\nA donde te gustaria ir ahora? " +
@@ -275,7 +312,7 @@ public class Clue{
                                         conventClue=playConvent(conventClue, isValidInput, decision, gameAssassin,conventAssassinClue,someoneHasDied);
                                         mapCentral();
                                         System.out.println("\nA donde te gustaria ir ahora? " +
-                                                           "\nMercado (1)\nBosque (2\nMonasterio (3)");
+                                                           "\nMercado (1)\nBosque (2\nMonasterio (3)\nDecir quien, con que arma y donde fue asesinada tu hermana (4)");
                                 break;
                                 }
                                 break;
@@ -332,7 +369,7 @@ public class Clue{
             if (someoneHasDied){
                 return true;
             } else{
-                givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                gameAssassin.setGivenClues();
                 System.out.println("Del cadaver de tu amigo sale una nota que tiene la palabra \"" + givenClues[givenCluesControl] + "\".\nLa guardas y volves al centro de la aldea");
                 givenCluesControl++;
                 pressAKeyToContinue(input);
@@ -351,7 +388,7 @@ public class Clue{
                 decision=isValidInput(input, isValidInput);
                     switch (decision){
                         case 1: //Investigate a local
-                                givenClues[givenCluesControl]=gameAssassin.getAssassinClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nUn local que tiene todo desordenado, como si alguien hubiese estado buscando algo de forma " +
                                                    "desesperada te llama la atencion.\nTe acercas y te das cuenta de que hay: \"" + givenClues[givenCluesControl] +
                                                    "\" lo cual no tiene relacion alguna con lo que se vende en ese lugar.\nLo guardas por si pudiera servirte como una" +
@@ -362,7 +399,7 @@ public class Clue{
                                 return true; 
 
                         case 2://Explore the place
-                                givenClues[givenCluesControl]=gameAssassin.getWeaponClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nTe pones a caminar por todo el mercado, hay muchos puestos, desde pociones milagrosas hasta " +
                                                    "libros de todas partes del mundo.\nCuando estas a punto de llegar al final del mercado," +
                                                    "te das cuenta de que alguien dejo tirado por el pozo: \"" + givenClues[givenCluesControl]+"." +
@@ -373,7 +410,7 @@ public class Clue{
                                 return true;
 
                         case 3://Wait for someone to get close
-                                givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nDecidis esperar a que alguien se acerque, por lo que te escondes en un puesto del mercado.\n" +
                                                    "Al pasar unos minutos, escuchas pasos de una persona que deja caer un trozo de papel.\n" +
                                                    "Cuando dejas de escuchar sus pasos, salis de tu escondite y agarras el papel, que tiene escrito "+
@@ -430,7 +467,7 @@ public class Clue{
                 if (someoneHasDied){
                     return true;
                 } else{
-                    givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                    gameAssassin.setGivenClues();
                     System.out.println("\nDel cadaver del asesino sale una nota que tiene escrito: \"" + givenClues[givenCluesControl] + 
                                        "\".\nLa guardas y volves al centro de la aldea");
                     givenCluesControl++;
@@ -451,7 +488,7 @@ public class Clue{
                 decision=isValidInput(input, isValidInput);
                     switch (decision){
                         case 1: //Go to the lake
-                                givenClues[givenCluesControl]=gameAssassin.getAssassinClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nTe pones a caminar rumbo al lago que observabas desde la aldea.\nCuando llegas, te das cuenta de que es hermoso. "
                                                     +"\nTe das cuenta de que hay ciertos manchas de sangre cerca de la orilla, por lo que decidis acercarte."
                                                     +"\nCuando lo haces, descubris de que hay \""+ givenClues[givenCluesControl] + "\".\nTe parece muy sospechoso y"+
@@ -462,7 +499,7 @@ public class Clue{
                                 return true; 
 
                         case 2://Explore deeper into the woods.
-                                givenClues[givenCluesControl]=gameAssassin.getWeaponClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nTe adentras en el bosque y descubris que hay una choza que tiene la puerta entre abierta." +
                                                    "\nDecidis entrar y te das cuenta de que alguien movio un mueble y en donde deberia estar la pared hay una puerta." +
                                                    "\nTe adentras y descubris una habitacion, y en el centro hay \""+ givenClues[givenCluesControl]+"\"." +
@@ -473,7 +510,7 @@ public class Clue{
                                 return true;
 
                         case 3://Follow the animal
-                                givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nCaminando por el bosque ves que un borrego esta jugueteando con algo.\n"+
                                                    "Te acercas y te das cuenta de que es una libreta con una sola hoja, que tiene escrito \""+
                                                    givenClues[givenCluesControl]+ "\".\nDecidis guardarlo por si puede servirte como pista " +
@@ -528,7 +565,7 @@ public class Clue{
                 if (someoneHasDied){
                     return true;
                 } else{
-                    givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                    gameAssassin.setGivenClues();
                     System.out.println("\nAl caer al piso el cadaver del cazador, de su sombrero sale \"" + gameAssassin.getAssassinClue() + 
                                        "\".\nLo guardas y volves al centro de la aldea");
                     givenCluesControl++;
@@ -549,7 +586,7 @@ public class Clue{
                     decision=isValidInput(input, isValidInput);
                     switch (decision){
                         case 1: //Go to the catacombs
-                                givenClues[givenCluesControl]=gameAssassin.getAssassinClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nTe dirigis con cuidado a las catacumbas, ya que si algo te pasa en ese lugar nadie se dara cuenta.\n"+
                                                    "Al llegar, descubris que no se puede avanzar mucho ya que un monton de rocas bloquean el camino.\n"+
                                                    "Curiosamente, te das cuenta de que hay una caja metida entre las rocas.\n"+
@@ -562,7 +599,7 @@ public class Clue{
                                 return true; 
 
                         case 2://Explore the convent 
-                                givenClues[givenCluesControl]=gameAssassin.getWeaponClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nDecidis abrir la vieja puerta del convento, con mucho esfuerzo, y al hacerlo, te das cuenta de que todo esta"+
                                                    " destruido.\nCada paso que das tiene mucho eco, lo cual te resulta gracioso.\nCuriosamente," +
                                                    " ves que una estatua semi destruida, en su mano, tiene \""+givenClues[givenCluesControl]+"\"." +
@@ -573,7 +610,7 @@ public class Clue{
                                 return true;
 
                         case 3://Explore the cementery.
-                                givenClues[givenCluesControl]=gameAssassin.getRoomClue();
+                                gameAssassin.setGivenClues();
                                 System.out.println("\nVes que a la par del convento se encuentra el viejo cementerio del pueblo.\""+
                                                    givenClues[givenCluesControl]+ "\".\nDecidis guardarlo por si puede servirte como pista " +
                                                    "y volves al centro de la aldea.");
@@ -607,12 +644,12 @@ public class Clue{
         String[] names=new String[]{"Plague Doctor", "Der Krampus", "Jack the Ripper", "Madame de Brinvilliers", 
         "Anne Boleyn", "Manuel Blanco Romasanta"};
         String[] weapons=new String[] {"Pistola", "Cuchillo","Veneno","Magia","Tortura","Fuego"};
-        String[] rooms=new String[]{"plaza del mercado","monasterio", "bosque", "cementerio","plaza central","lago del bosque","catacumbas"};
+        String[] rooms=new String[]{"plaza del mercado","monasterio", "bosque", "cementerio","plaza central","lago del bosque"};
         String userGuess;
         boolean isWrong=false;
         int lives;
         decision=3;
-
+        drawFinalGameStage();
                 if (givenCluesControl!=5){ //If six clues were not given, this fills givenClues array with text, so "null" is not shown.
                     for (int i=(givenCluesControl);i<6;i++){
                         switch(i){
@@ -655,12 +692,13 @@ public class Clue{
                     
                 System.out.println("\n\nLas pistas recolectadas son: " + Arrays.toString(givenClues));
                 }  
-                System.out.println("\nQuien es el asesino?");
+                System.out.println("\nEntre todos los sospechosos, quien es el asesino? Te daremos una descripcion de cada uno: ");
+                loadAssassins();
                 for (int i=0;i<6;i++){
                     System.out.println(names[i] + "  ("+(i)+")");
                 }
                 while(lives!=0){
-                    decision=isValidInput(input, isValidInput);
+                    decision=isValidInputFinalGameStage(input, isValidInput);
                     if (names[decision]==gameAssassin.getName()){
                         System.out.println("\"Tiene sentido! Entre todos los sospechosos esta persona coincide con todas las pistas que hemos reunido\"");
                         break;
@@ -681,12 +719,12 @@ public class Clue{
                 }
 
                 while(lives!=0){
-                    decision=isValidInput(input, isValidInput);
-                    if (names[decision]==gameAssassin.getName()){
+                    decision=isValidInputFinalGameStage(input, isValidInput);
+                    if (weapons[decision]==gameAssassin.getWeapon()){
                         System.out.println("\"Tiene sentido! Entre todas las armas sospechosas esta coincide con lo que se descubrio en la autospia.\"");
                         break;
                     }else{
-                        System.out.println("\"Descartamos a este sospechoso, las pistas reunidas no tienen ni una sola relacion.\"");
+                        System.out.println("\"Descartamos esta arma, las pistas reunidas no tienen ni una sola relacion.\"");
                         lives--;
                         if (lives!=0){
                             System.out.println("Te daremos una de las pistas que encontramos sobre el arma homicida: " + gameAssassin.getWeaponClue());
@@ -695,14 +733,14 @@ public class Clue{
                 }
                 if (lives!=0){ 
                     System.out.println("\nEn cual de estos lugares fue asesinada tu hermana?");
-                    for (int i=0;i<7;i++){
+                    for (int i=0;i<6;i++){
                         System.out.println(rooms[i] + "  ("+(i)+")");
                     }
                 }
 
                 while(lives!=0){
-                    decision=isValidInput(input, isValidInput);
-                    if (names[decision]==gameAssassin.getName()){
+                    decision=isValidInputFinalGameStage(input, isValidInput);
+                    if (rooms[decision]==gameAssassin.getRoom()){
                         System.out.println("\"Tiene sentido! Entre todos los lugares sospechosos este coincide con todas las pistas que hemos reunido\"");
                         break;
                     }else{
@@ -808,252 +846,253 @@ public class Clue{
      * @return 
      */
     public static boolean assassinChallenge(String[] questions,String[] answers,Scanner input,boolean isValidInput,Random rand,
-                                            int arrayControl, int questionsControl,byte decision){
-        System.out.println(questions[arrayControl] + "\n" + answers[arrayControl]);
-        byte control=6;
-        int bullet=rand.nextInt(control);
-        int shoot;
-        boolean someoneHasDied=false;
-        do{     
-
-            decision=isValidInputAssassinChallenge(input, isValidInput);
+    int arrayControl, int questionsControl,byte decision){
+            
+            System.out.println(questions[arrayControl] + "\n" + answers[arrayControl]);
+            byte control=6;
+            int bullet=rand.nextInt(control);
+            int shoot;
+            boolean someoneHasDied=false;
+            do{     
                 
-    
-                switch (arrayControl){
-                    case 0:
-                            
-                            if (decision!=3){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==3){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-
-                    case 1:
-                            
-                            if (decision!=1){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==1){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 2:
-
+                    decision=isValidInputAssassinChallenge(input, isValidInput);
                     
-                            if (decision!=2){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==2){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 3:
-
-                            
-                            if (decision!=3){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==3){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 4:
-
-                    
-                            if (decision!=3){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==3){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 5:
-                            
-                            if (decision!=3){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==3){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 6: 
-                            if (decision!=3){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==3){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                    case 7:
-                            if (decision!=4){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==4){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-                            
-                    case 8:
-                            if (decision!=5){
-                                someoneHasDied=aimPlayer(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return true;
-                                }else{
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                }
-                                
-                            }else if (decision==5){
-                                someoneHasDied=aimFriend(rand,bullet,control);
-                                if (someoneHasDied){
-                                    return false;
-                                }else {
-                                    control--;
-                                    bullet=rand.nextInt(control);
-                                    arrayControl=rand.nextInt(questionsControl);
-                                    System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
-                                }
-
-                            }
-                            
-                            break;
-
-                    default:
-                            System.out.println("Ingrese una opcion valida");
-                }
-        }while (someoneHasDied==false);
         
-        return false;
+                    switch (arrayControl){
+                        case 0:
+                                
+                                if (decision!=3){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==3){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+
+                        case 1:
+                                
+                                if (decision!=1){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==1){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 2:
+
+                        
+                                if (decision!=2){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==2){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 3:
+
+                                
+                                if (decision!=3){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==3){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 4:
+
+                        
+                                if (decision!=3){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==3){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 5:
+                                
+                                if (decision!=3){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==3){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 6: 
+                                if (decision!=3){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==3){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                        case 7:
+                                if (decision!=4){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==4){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+                                
+                        case 8:
+                                if (decision!=5){
+                                    someoneHasDied=aimPlayer(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return true;
+                                    }else{
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                    }
+                                    
+                                }else if (decision==5){
+                                    someoneHasDied=aimFriend(rand,bullet,control);
+                                    if (someoneHasDied){
+                                        return false;
+                                    }else {
+                                        control--;
+                                        bullet=rand.nextInt(control);
+                                        arrayControl=rand.nextInt(questionsControl);
+                                        System.out.println(questions[arrayControl]+"\n"+answers[arrayControl]);
+                                    }
+
+                                }
+                                
+                                break;
+
+                        default:
+                                System.out.println("Da una repuesta valida");
+                    }
+            }while (someoneHasDied==false);
+            
+            return false;
         
     }
 
@@ -1161,8 +1200,68 @@ public class Clue{
                             System.out.println("Ingrese un dato valido");
                 }
           
-        }while (isValidInput=false);
+        }while (isValidInput==false);
             return -1;
+    }
+    public static byte isValidInputFinalGameStage(Scanner input,boolean isValidInput){
+        String valor;
+        isValidInput=false;
+        do{ 
+            
+            valor=input.nextLine();
+                switch(valor){
+                    case "0":
+                            return 0;
+                    case "1":
+                            return 1;
+                    case "2":
+                            return 2;
+                    case "3":
+                            return 3;
+                    case "4":
+                            return 4;
+                    case "5":
+                            return 5;
+                    default:
+                            System.out.println("Ingrese un dato valido");
+                }
+          
+        }while (isValidInput==false);
+            return -1;
+    }
+
+    /**
+     * This method lets the user read the instructions.
+     */
+    public static void loadInstructions(){
+        try {   
+            FileReader input = new FileReader(instruccionesTxt);
+            int c = input.read();
+            while (c != -1) {
+            str.append((char)c);
+            c = input.read();  
+        }  //fin del while
+            System.out.println(str);
+            input.close();
+        }catch (IOException ex) {
+            System.out.println("Algo mal");  } //fin del catch
+    }
+
+    /**
+     * This method lets the user read information of each suspect.
+     */
+    public static void loadAssassins(){
+        try {   
+            FileReader input = new FileReader(asesinosTxt);
+            int c = input.read();
+            while (c != -1) {
+            str.append((char)c);
+            c = input.read();  
+        }  //fin del while
+            System.out.println(str);
+            input.close();
+        }catch (IOException ex) {
+            System.out.println("Algo mal");  } //fin del catch
     }
   
 
@@ -1171,6 +1270,7 @@ public class Clue{
         byte decision;
         boolean isValidInput=false, marketClue=false, conventClue=false, forestClue=false,validInput=false,forestAssassinClue=false,
                 conventAssassinClue=false,marketAssassinClue=false,isHard=false,someoneHasDied=false;
+            welcomeToClue();
             System.out.println("Bienvenido/a clue. El juego en el cual usted debe averiguar quien mato a su hermana, con que arma y en donde."+
                                "\nPara empezar a jugar ingrese el numero 1" +
                                "\nPara cambiar la dificultad ingrese el numero 2" +
@@ -1195,7 +1295,7 @@ public class Clue{
                                                         "\nPara salir del juego ingrese el numero 4");
                                         break;
                                 case 3: //El jugador podra leer las instrucciones.
-
+                                        loadInstructions();
                                         break;
                                 case 4:
                                         System.exit(0);
